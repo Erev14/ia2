@@ -8,24 +8,34 @@ class Linear_Neuron():
 
     def predict(self, X):
         return np.dot(self.w, X) + self.b # Y_est
-    
-    def fit(self, X, Y, epochs: int = 50, solver='BGD'):
-        p = X.shape[1] # columns (patron)
 
-        if solver == 'SGD':
-            for _ in range(epochs):
-                for i in range(p): 
-                    y_est = self.predict(X[:,i]) # predict for single data
-                    self.w += self.etha * (Y[:,i] - y_est) * X[:,i]
-                    self.b += self.etha * (Y[:,i] - y_est)
-        elif solver == 'BGD':
-            for _ in range(epochs):
-                Y_est = self.predict(X)
-                self.w += (self.etha / p) * ((Y - Y_est) @ X.T).ravel() # /p for normalize
-                self.b += (self.etha / p) * np.sum(Y - Y_est) # /p for normalize
-        else: # Pseudo-Inverse (direct method)
-            X_hat = np.concatenate((np.ones((1,p)), X), axis=0) # tupple and on axies of rows
-            W_hat = np.dot(Y.reshape(1, -1), np.linalg.pinv(X_hat))
-            self.b = W_hat[0,0]
-            self.w = W_hat[0,1:]
+    def batcher(self, X, Y, size):
+        p = X.shape[1]
+        li, ui = 0, size
+        while True:
+            if li < p:
+                yield X[:, li:ui], Y[:, li:ui]
+                li, ui = li + size, ui + size
+            else:
+                return None
+    
+    def MSE(self, X, Y):
+        p = X.shape[1]
+        Y_est = self.predict(X)
+        return (1/p) * np.sum((Y-Y_est)**2)
+
+    def fit(self, X, Y, epochs: int = 50, batch_size = 24):
+        mse_history = []
+        for _ in range(epochs):
+            minibatch = self.batcher(X, Y, batch_size)
+            for mX, mY in minibatch:
+                p = mX.shape[1]
+                Y_est = self.predict(mX)
+                self.w += (self.etha / p) * np.dot((mY - Y_est), mX.T).ravel()
+                self.w += (self.etha / p) * np.sum((mY - Y_est))
+            mse_history.append(self.MSE(X, Y))
+
+        return mse_history
+
+        
             
