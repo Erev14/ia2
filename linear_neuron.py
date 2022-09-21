@@ -1,6 +1,6 @@
 import numpy as np
 
-class Linear_Neuron():
+class LinearNeuron():
     def __init__(self, n_inputs, learning_rate=0.1) -> None:
         self.w = -1 + 2 * np.random.rand(n_inputs)
         self.b = -1 + 2 * np.random.rand()
