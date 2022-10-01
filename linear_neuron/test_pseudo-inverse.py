@@ -13,5 +13,6 @@ neuron.fit(x, y, solver='pseudoinverse', batch_size=0)
 
 xn = np.array([[-1, 1]])
 plt.plot(xn.ravel(), neuron.predict(xn), '--r')
+plt.title("Pseudo-Inverse")
 
 plt.show()
