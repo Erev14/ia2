@@ -4,15 +4,20 @@ import numpy as np
 class neuron:
     def __init__(self, 
             n_inputs, 
-            act_function=functions['linear']
+            act_function='linear'
         ) -> None:
         self.w = -1 + 2 * np.random.rand(n_inputs)
         self.b = -1 + 2 * np.random.rand()
         self.f = act_function
 
+    def predict_probability(self, X, threshold=0.5):
+        if self.f != 'logistic':
+            return None
+        return 1 * (self.predict_train(X) > threshold)
+        
     def predict(self, X):
-        Z = self.W @ X + self.b
-        return self.f(Z)
+        Z = self.w @ X + self.b
+        return functions[self.f](Z)
 
     def train(self, 
             X, 
@@ -24,7 +29,7 @@ class neuron:
         p = X.shape[1] # columns
         for _ in range(epochs):
             # Propagation
-            Z = self.W @ X + self.b
+            Z = self.w @ X + self.b
             Yest, dY = self.f(Z, derivative=True)
 
             # training
