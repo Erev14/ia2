@@ -8,16 +8,16 @@ class LogisticNeuron():
     self.b = MIN_VAL + RANDOM_RANGE * np.random.rand()
     self.etha = learning_rate
 
-  def predict_train(self, X):
-    Z = self.w @ X + self.b
+  def predict_probability(self, X):
+    Z = np.dot(self.w, X) + self.b
     return 1 / (1 + np.exp(-Z)) # y_est
 
   def predict(self, X, threshold=0.5):
-    return 1 * (self.predict_train(X) > threshold)
+    return 1 * (self.predict_probability(X) > threshold)
   
-  def fit(self, X, Y, epochs: int = 50):
+  def fit(self, X, Y, epochs: int = 1000):
     p = X.shape[1]
     for _ in range(epochs):
-      Y_est = self.predict(X)
-      self.w += (self.etha / p) * ((Y - Y_est) @ X.T).ravel() # /p for normalize
+      Y_est = self.predict_probability(X)
+      self.w += (self.etha / p) * np.dot((Y - Y_est), X.T).ravel() # /p for normalize
       self.b += (self.etha / p) * np.sum(Y - Y_est) # /p for normalize
