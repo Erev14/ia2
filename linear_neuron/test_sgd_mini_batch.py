@@ -9,9 +9,10 @@ y = -18 * x + 6 + NOISE * np.random.rand(POINTS)
 plt.plot(x, y, 'b.')
 
 neuron = LinearNeuron(1, 0.1)
-history = neuron.fit(x, y, solver='SGD', batch_size=50)
+history = neuron.fit(x, y, solver='SGD', batch_size=190)
 xn = np.array([[-1, 1]])
 plt.plot(xn.ravel(), neuron.predict(xn), '--r')
+plt.title('Batch SGD')
 
 plt.figure()
 plt.plot(history)
