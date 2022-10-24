@@ -39,7 +39,8 @@ def softmax(z, derivative=False):
 def logistic_hidden(z, derivative=False):
     a = 1 / ( 1 + np.exp(-z) ) # activate
     if derivative:
-        da = 1 / (1 + np.exp(-z))
+        da = a * (1 - a)
+        # da = 1 / (1 + np.exp(-z))
         return a, da
     return a
 

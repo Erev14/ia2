@@ -21,9 +21,9 @@ class MLP:
             else:
                 self.f[l] = functions[hidden_activation]
     def predict(self, X):
-        a = np.asanyarray(X)
+        A = np.asanyarray(X)
         for l in range(1, self.L + 1):
-            Z = self.w[l] @ X + self.b[l]n
+            Z = self.w[l] @ A + self.b[l]
             A = self.f[l](Z)
         return A
     
