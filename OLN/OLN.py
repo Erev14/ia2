@@ -3,8 +3,10 @@ import numpy as np
 
 class OLN:
     def __init__(self, n_inputs, n_outputs, act_function='linear') -> None:
-        self.w = -1 + 2 * np.random.rand(n_outputs, n_inputs)
-        self.b = -1 + 2 * np.random.rand(n_outputs, 1)
+        MIN_VAL = -1
+        RANDOM_RANGE = 2 # start from range + min and will be the max value
+        self.w = MIN_VAL + RANDOM_RANGE * np.random.rand(n_outputs, n_inputs)
+        self.b = MIN_VAL + RANDOM_RANGE * np.random.rand(n_outputs, 1)
         self.f = act_function
         
     def predict(self, X):
